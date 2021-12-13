@@ -1,13 +1,17 @@
+#include "wireless.h"
+#include "Gheader/mac.h"
+
 #include <pcap.h>
 #include <iostream>
 #include <stdint.h>
+#include <thread>
 
 using namespace std;
 
 struct Param{
     const char* interface = nullptr;
     const char* ap = nullptr;
-    const char* station = "NULL";
+    const char* station = nullptr;
 
     bool parse(int argc, char const *argv[]){
         if (argc < 3){
@@ -17,9 +21,10 @@ struct Param{
         
         interface = argv[1];
         ap = argv[2];
-        if (3 < argc)
+        if (3 == argc)
+            station = "ff:ff:ff:ff:ff:ff";
+        else
             station = argv[3];
-        
         return true;        
     }
 
@@ -35,3 +40,6 @@ struct Param{
         printf("    station mac : %s\n", station);
     }
 } ;
+
+
+size_t InitDeauthPkt(u_char* pkt);
